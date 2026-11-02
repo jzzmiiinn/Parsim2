@@ -1,0 +1,528 @@
+@use "@coreui/coreui/scss/coreui" as * with ( 
+  $enable-deprecation-messages: false,
+  $primary: #ff6600,
+);
+@use "@coreui/chartjs/scss/coreui-chartjs";
+@use "vendors/simplebar";
+
+body {
+  background-color: var(--cui-tertiary-bg);
+  color: var(--cui-body-color);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.wrapper {
+  width: 100%;
+  padding-inline: var(--cui-sidebar-occupy-start, 0) var(--cui-sidebar-occupy-end, 0);
+  will-change: auto;
+  @include transition(padding .15s);
+}
+
+.header > .container-fluid,
+.sidebar-header {
+  min-height: calc(4rem + 1px);
+}
+
+.sidebar-header {
+  .nav-underline-border {
+    --cui-nav-underline-border-link-padding-x: 1rem;
+    --cui-nav-underline-border-gap: 0;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: calc(4rem + 1px);
+  }
+}
+
+.sidebar-toggler {
+  margin-inline-start: auto;
+}
+
+.sidebar-narrow,
+.sidebar-narrow-unfoldable:not(:hover) {
+  .sidebar-toggler {
+    margin-inline-end: auto;
+  }
+}
+
+.header > .container-fluid + .container-fluid {
+  min-height: 3rem;
+}
+
+.footer {
+  min-height: calc(3rem + 1px);
+}
+
+/* ==========================================================================
+   Parsim Theme System: Light (Default) and Dark Theme Specifications
+   ========================================================================== */
+
+/* 1. Light Theme: white backgrounds, light-gray surfaces, dark text, vibrant orange accents */
+:root,
+[data-coreui-theme="light"] {
+  --cui-primary: #ff6600;
+  --cui-primary-rgb: 255, 102, 0;
+  --cui-primary-text-emphasis: #c44700;
+  --cui-primary-bg-subtle: #fff3eb;
+  --cui-primary-border-subtle: #ffc299;
+
+  --cui-body-bg: #f8fafc;
+  --cui-body-color: #0f172a;
+  --cui-tertiary-bg: #f8fafc;
+  --cui-secondary-bg: #ffffff;
+  
+  --cui-card-bg: #ffffff;
+  --cui-card-border-color: #e2e8f0;
+  --cui-border-color: #e2e8f0;
+  --cui-border-color-translucent: rgba(0, 0, 0, 0.08);
+
+  --cui-header-bg: #ffffff;
+  --cui-sidebar-bg: #ffffff;
+  --cui-sidebar-color: #1e293b;
+  --cui-sidebar-border-color: #e2e8f0;
+  --cui-sidebar-nav-link-color: #334155;
+  --cui-sidebar-nav-link-hover-color: #ff6600;
+  --cui-sidebar-nav-link-hover-bg: #fff7ed;
+  --cui-sidebar-nav-link-active-color: #ff6600;
+  --cui-sidebar-nav-link-active-bg: #ffedd5;
+  --cui-sidebar-brand-color: #0f172a;
+  --cui-sidebar-footer-bg: #f8fafc;
+  --cui-sidebar-footer-border-color: #e2e8f0;
+
+  --cui-dropdown-bg: #ffffff;
+  --cui-dropdown-border-color: #e2e8f0;
+  --cui-dropdown-color: #0f172a;
+  --cui-dropdown-link-color: #334155;
+  --cui-dropdown-link-hover-color: #ff6600;
+  --cui-dropdown-link-hover-bg: #fff7ed;
+
+  --cui-table-bg: #ffffff;
+  --cui-table-border-color: #e2e8f0;
+  --cui-table-hover-bg: #f8fafc;
+  --cui-table-striped-bg: #f8fafc;
+
+  --cui-modal-bg: #ffffff;
+  --cui-modal-border-color: #e2e8f0;
+  --cui-modal-header-border-color: #e2e8f0;
+  --cui-modal-footer-border-color: #e2e8f0;
+}
+
+/* 2. Dark Theme: near-black backgrounds, charcoal surfaces, white text, vibrant orange accents */
+[data-coreui-theme="dark"] {
+  --cui-primary: #ff6600;
+  --cui-primary-rgb: 255, 102, 0;
+  --cui-primary-text-emphasis: #ff944d;
+  --cui-primary-bg-subtle: rgba(255, 102, 0, 0.15);
+  --cui-primary-border-subtle: rgba(255, 102, 0, 0.3);
+
+  --cui-body-bg: #090b10;
+  --cui-body-bg-rgb: 9, 11, 16;
+  --cui-dark-bg-subtle: #090b10;
+  --cui-tertiary-bg: #090b10;
+  --cui-secondary-bg: #11151f;
+  --cui-body-color: #f8fafc;
+  --cui-body-secondary-color: #94a3b8;
+
+  --cui-card-bg: #11151f;
+  --cui-card-border-color: #1e2638;
+  --cui-border-color: #1e2638;
+  --cui-border-color-translucent: rgba(255, 255, 255, 0.08);
+
+  --cui-header-bg: #0d111a;
+  --cui-sidebar-bg: #0b0e15;
+  --cui-sidebar-border-color: #1a202c;
+  --cui-sidebar-color: #f1f5f9;
+  --cui-sidebar-nav-link-color: #94a3b8;
+  --cui-sidebar-nav-link-hover-color: #ff7700;
+  --cui-sidebar-nav-link-hover-bg: rgba(255, 102, 0, 0.12);
+  --cui-sidebar-nav-link-active-color: #ff7700;
+  --cui-sidebar-nav-link-active-bg: rgba(255, 102, 0, 0.18);
+  --cui-sidebar-brand-color: #f8fafc;
+  --cui-sidebar-footer-bg: #0b0e15;
+  --cui-sidebar-footer-border-color: #1a202c;
+
+  --cui-dropdown-bg: #141924;
+  --cui-dropdown-border-color: #21283a;
+  --cui-dropdown-color: #f8fafc;
+  --cui-dropdown-link-color: #cbd5e1;
+  --cui-dropdown-link-hover-color: #ff7700;
+  --cui-dropdown-link-hover-bg: rgba(255, 102, 0, 0.12);
+
+  --cui-table-bg: #11151f;
+  --cui-table-border-color: #1e2638;
+  --cui-table-hover-bg: #161c2a;
+  --cui-table-striped-bg: #141824;
+
+  --cui-modal-bg: #11151f;
+  --cui-modal-border-color: #1e2638;
+  --cui-modal-header-border-color: #1e2638;
+  --cui-modal-footer-border-color: #1e2638;
+
+  .footer {
+    --cui-footer-bg: #0d111a;
+  }
+}
+
+/* ==========================================================================
+   Parsim UI Accents & Active State Highlights
+   ========================================================================== */
+
+.sidebar-nav .nav-link.active {
+  border-left: 3px solid #ff6600;
+  font-weight: 600;
+}
+
+.badge-primary, .bg-primary {
+  background-color: #ff6600 !important;
+  color: #ffffff !important;
+}
+
+.text-primary {
+  color: #ff6600 !important;
+}
+
+.border-start-primary {
+  border-left-color: #ff6600 !important;
+}
+
+.border-top-primary {
+  border-top-color: #ff6600 !important;
+}
+
+.btn-primary {
+  --cui-btn-bg: #ff6600;
+  --cui-btn-border-color: #ff6600;
+  --cui-btn-hover-bg: #e65c00;
+  --cui-btn-hover-border-color: #e65c00;
+  --cui-btn-active-bg: #cc5200;
+  --cui-btn-active-border-color: #cc5200;
+  color: #ffffff;
+}
+
+.btn-outline-primary {
+  --cui-btn-color: #ff6600;
+  --cui-btn-border-color: #ff6600;
+  --cui-btn-hover-bg: #ff6600;
+  --cui-btn-hover-border-color: #ff6600;
+}
+
+.progress-bar.bg-primary {
+  background-color: #ff6600 !important;
+}
+
+/* Parsim sidebar */
+.parsim-sidebar {
+  --cui-sidebar-bg: #0b0e15;
+  --cui-sidebar-color: #f1f5f9;
+  --cui-sidebar-border-color: #1b2230;
+  --cui-sidebar-nav-link-color: #98a2b3;
+  --cui-sidebar-nav-link-hover-color: #ffffff;
+  --cui-sidebar-nav-link-hover-bg: rgba(255, 255, 255, 0.05);
+  --cui-sidebar-nav-link-active-color: #ff7a1a;
+  --cui-sidebar-nav-link-active-bg: rgba(255, 102, 0, 0.12);
+  --cui-sidebar-brand-color: #f8fafc;
+  --cui-sidebar-footer-bg: #0b0e15;
+  --cui-sidebar-footer-border-color: #1b2230;
+  background-color: #0b0e15;
+  border-color: #1b2230 !important;
+}
+
+.parsim-sidebar-header {
+  min-height: 84px;
+  padding-inline: 1rem;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.parsim-sidebar-brand {
+  min-width: 0;
+  min-height: 72px;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.parsim-sidebar-logo-frame {
+  display: block;
+  width: 164px;
+  height: 72px;
+  flex: 0 1 164px;
+  overflow: hidden;
+  border-radius: 0.375rem;
+}
+
+.parsim-sidebar-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+.parsim-sidebar-logo-compact {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.parsim-sidebar-logo-compact .parsim-sidebar-logo {
+  transform: scale(3);
+  transform-origin: 50% 27.5%;
+}
+
+.parsim-sidebar .sidebar-header {
+  gap: 0.5rem;
+}
+
+.parsim-sidebar .sidebar-brand {
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+.parsim-sidebar.sidebar-narrow .parsim-sidebar-header,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-sidebar-header {
+  min-height: 84px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding-inline: 0.25rem !important;
+}
+
+.parsim-sidebar.sidebar-narrow .parsim-sidebar-brand,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-sidebar-brand {
+  width: 36px;
+  min-height: 36px;
+  flex: 0 0 36px;
+  justify-content: center;
+}
+
+.parsim-sidebar.sidebar-narrow .parsim-sidebar-header > .d-flex,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-sidebar-header > .d-flex {
+  flex-direction: column;
+  gap: 0.25rem !important;
+}
+
+.parsim-sidebar.sidebar-narrow .sidebar-toggler,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .sidebar-toggler {
+  margin-inline: 0;
+}
+
+.parsim-sidebar .parsim-sidebar-logo-full {
+  display: block;
+  width: 160px;
+  height: 64px;
+  margin-left: 0;
+  object-fit: cover;
+  object-position: center 45%;
+}
+
+.parsim-sidebar .parsim-sidebar-logo-narrow {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.parsim-collapse-button {
+  margin-inline-start: auto;
+  color: #788394;
+}
+
+.parsim-collapse-button:hover,
+.parsim-close-button:hover {
+  color: #ffffff;
+}
+
+.parsim-workspace {
+  padding: 1rem 0.875rem 0.25rem;
+}
+
+.parsim-workspace-toggle,
+.parsim-profile-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem;
+  color: #f1f5f9;
+  text-align: left;
+  text-decoration: none;
+  border: 1px solid #252c39;
+  border-radius: 0.625rem;
+  background: #11151f;
+}
+
+.parsim-workspace-toggle:hover,
+.parsim-profile-toggle:hover,
+.parsim-workspace-toggle.show,
+.parsim-profile-toggle.show {
+  color: #ffffff;
+  background: #171d29;
+  border-color: #343d4d;
+}
+
+.parsim-workspace-mark {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 2rem;
+  place-items: center;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  background: #ff6600;
+}
+
+.parsim-workspace-copy,
+.parsim-profile-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.parsim-workspace-caption {
+  color: #788394;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.2;
+}
+
+.parsim-workspace-name,
+.parsim-profile-name {
+  overflow: hidden;
+  color: #f1f5f9;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.parsim-dropdown-chevron {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex: 0 0 auto;
+  color: #788394;
+}
+
+.parsim-dropdown-menu {
+  --cui-dropdown-bg: #141924;
+  --cui-dropdown-border-color: #252c39;
+  --cui-dropdown-color: #e2e8f0;
+  --cui-dropdown-link-color: #cbd5e1;
+  --cui-dropdown-link-hover-bg: rgba(255, 102, 0, 0.12);
+  --cui-dropdown-link-hover-color: #ff7a1a;
+  min-width: 13rem;
+  padding: 0.375rem;
+  border-radius: 0.625rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.parsim-sidebar .sidebar-nav .nav-title {
+  padding: 1.125rem 1.5rem 0.45rem;
+  color: #667085;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.parsim-sidebar .sidebar-nav .nav-link {
+  min-height: 2.5rem;
+  margin: 0.125rem 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.parsim-sidebar .sidebar-nav .nav-link .nav-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-right: 0.75rem;
+  color: #778395;
+}
+
+.parsim-sidebar .sidebar-nav .nav-link:hover .nav-icon,
+.parsim-sidebar .sidebar-nav .nav-link.active .nav-icon {
+  color: #ff7a1a;
+}
+
+.parsim-sidebar .sidebar-nav .nav-link.active {
+  color: #ff7a1a;
+  font-weight: 600;
+  border-left-color: #ff6600;
+}
+
+.parsim-sidebar-footer {
+  display: block;
+  padding: 0.75rem 0.5rem 0.875rem;
+  border-top: 1px solid #1b2230;
+  background: #0b0e15;
+}
+
+.parsim-sidebar-footer .sidebar-nav {
+  margin-bottom: 0.625rem;
+}
+
+.parsim-sidebar-footer .sidebar-nav .nav-link {
+  min-height: 2.25rem;
+}
+
+.parsim-profile-dropdown {
+  padding: 0.75rem 0.25rem 0;
+  border-top: 1px solid #1b2230;
+}
+
+.parsim-profile-toggle {
+  padding: 0.625rem;
+  border-color: transparent;
+  background: transparent;
+}
+
+.parsim-profile-toggle:hover,
+.parsim-profile-toggle.show {
+  border-color: #252c39;
+  background: #11151f;
+}
+
+.parsim-profile-role {
+  color: #788394;
+  font-size: 0.6875rem;
+}
+
+.parsim-sidebar.sidebar-narrow .parsim-workspace-copy,
+.parsim-sidebar.sidebar-narrow .parsim-dropdown-chevron,
+.parsim-sidebar.sidebar-narrow .parsim-profile-copy,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-workspace-copy,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-dropdown-chevron,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-profile-copy {
+  display: none;
+}
+
+.parsim-sidebar.sidebar-narrow .parsim-workspace-toggle,
+.parsim-sidebar.sidebar-narrow .parsim-profile-toggle,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-workspace-toggle,
+.parsim-sidebar.sidebar-narrow-unfoldable:not(:hover) .parsim-profile-toggle {
+  justify-content: center;
+}
+
+@media (max-width: 991.98px) {
+  .parsim-sidebar-header {
+    min-height: 4rem;
+  }
+
+  .parsim-sidebar-brand {
+    min-height: 3.5rem;
+  }
+
+  .parsim-sidebar-logo-frame {
+    height: 3rem;
+  }
+}
